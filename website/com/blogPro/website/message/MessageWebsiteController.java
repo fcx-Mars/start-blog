@@ -9,6 +9,7 @@ import cn.jbolt.common.model.Article;
 import cn.jbolt.common.model.Comment;
 import cn.jbolt.common.model.Noluser;
 import cn.jbolt.common.model.UserCollect;
+import cn.jbolt.common.model.UserFocus;
 
 public class MessageWebsiteController extends Controller {
 	public void index() {
@@ -62,11 +63,47 @@ public class MessageWebsiteController extends Controller {
 			ids += userCollects.get(i).getArticleId() + ",";
 		}
 		ids += userCollects.get(len-1).getArticleId() + ")";
-		System.out.println(ids);
 		List<Article> get_collects =Article.dao.find("select title,c_url_img,s_content,author,clickN,comN from article left join click on article.id = click.id where article.id in "+ids+"");
 		renderJson("{\"getCollectData\":"+JFinalJson.getJson().toJson(get_collects)+",\"jsonLen\":"+get_collects.size()+"}");
 	}
 	
-
-
+	public void getFanedJson() {
+		List<UserFocus> userFocus = UserFocus.dao.find("select focus_id from user_focus where user_id = "+getPara("userID")+"");
+		String ids = "(";
+		int i ;
+		for(i=0;i<userFocus.size();i++) {
+			ids += userFocus.get(i).getFocusId() + ",";
+		}
+		ids += userFocus.get(userFocus.size()-1).getFocusId() + ")";
+		System.out.println("weishm:"+ids);
+		List<Noluser> nolusers = Noluser.dao.find("select nolname,discription,id,icon from noluser where id in "+ids+"");
+		renderJson("{\"getFanedData\":"+JFinalJson.getJson().toJson(nolusers)+",\"jsonLen\":"+nolusers.size()+"}");
+	}
+	
+	public void getFaningJson() {
+		List<UserFocus> userFocus = UserFocus.dao.find("select focus_id from user_focus where user_id = "+getPara("userID")+"");
+		String ids = "(";
+		int i ;
+		for(i=0;i<userFocus.size();i++) {
+			ids += userFocus.get(i).getFocusId() + ",";
+		}
+		ids += userFocus.get(userFocus.size()-1).getFocusId() + ")";
+		List<Noluser> nolusers = Noluser.dao.find("select nolname,discription,id,icon from noluser where id not in "+ids+" order by rand() limit 5");
+		renderJson("{\"getFaningData\":"+JFinalJson.getJson().toJson(nolusers)+",\"jsonLen\":"+nolusers.size()+"}");
+	}
+	
+	public void setFan() {
+		if(getParaToInt("userID")!=null) {
+			List<UserFocus> one = UserFocus.dao.find("select * from user_focus where user_id ="+getPara("userID")+" and focus_id="+getPara("focusID")+"");
+			if(one.isEmpty()) {
+				new UserFocus().set("user_id", getPara("userID")).set("focus_id", getPara("focusID")).save();
+				renderJson(1);
+			}else {
+				new UserFocus().deleteById(one.get(0).getId());
+				renderJson(0);
+			}
+		}else {
+			renderJson();
+		}
+	}
 }
