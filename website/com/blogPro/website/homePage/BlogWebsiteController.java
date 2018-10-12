@@ -76,8 +76,8 @@ public class BlogWebsiteController extends Controller {
 	public void list() {
 		int b = getParaToInt("p");
 		int c = b-5;
-		List<Article> ifaces = Article.dao.find("select *,article.id from article left join click on article.id=click.id order by article.id desc limit "+c+",5");
-		
+		List<Article> ifaces = Article.dao.findByCache("article_list","articles","select *,article.id from article left join click on article.id=click.id order by article.id desc limit "+c+",5");
+		//出现问题，点击加载更多的时候会出现直接从缓存里取出重复的数据
 		//List<Click> clicks = Click.dao.find("select article.id,clickN,comN from click,article where article.id = click.id");
 		//System.out.println("{\"jsonData\":"+JFinalJson.getJson().toJson(ifaces)+",\"comData\":"+JFinalJson.getJson().toJson(clicks)+"}");
 		renderJson("{\"jsonData\":"+JFinalJson.getJson().toJson(ifaces)+"}"); 	
