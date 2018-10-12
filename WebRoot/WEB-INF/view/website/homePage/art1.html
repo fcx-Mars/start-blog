@@ -186,19 +186,19 @@ $(document).ready(function(){
 		data:{"title_id":#(mystr??),"userID":#(userID??)},
 		success:function(result){
 		console.log(result);
-		if(result.aut[0].icon != null){
-			document.getElementById("youricon").src= result.aut[0].icon;
+		if(result.aut.icon != null){
+			document.getElementById("youricon").src= result.aut.icon;
 		}
 		
-		document.getElementById("authorId").href="website/user?userid="+result.aut[0].id;
+		document.getElementById("authorId").href="website/user?userid="+result.aut.id;
 		//document.getElementById("logicon").src = "#(icon??)"
-		$("#title").text(result.artData[0].title);
-		$("#content").html(result.artData[0].content);
-		$("#aut").text("文/"+result.aut[0].nolname);
-		$("#follow").attr("name",result.artData[0].userid);
-		$("#followed").attr("name",result.artData[0].userid);
+		$("#title").text(result.artData.title);
+		$("#content").html(result.artData.content);
+		$("#aut").text("文/"+result.aut.nolname);
+		$("#follow").attr("name",result.artData.userid);
+		$("#followed").attr("name",result.artData.userid);
 		//$("#logicon").attr("src", "upload/temp/-4530d622cce02fdb.jpg");
-		$("#like").attr("name",result.artData[0].userid);
+		$("#like").attr("name",result.artData.userid);
 		if(#(userID??)!=0){
 			if(result.collect==0){
 				$("#like").css("color","gray");
@@ -255,6 +255,7 @@ function comment_B(but){
 		url:"website/homePage/butBN",
 		data:{"id":but.name,"userID":#(userID??)},
 		success:function(data){
+			console.log(data);
 			getComData();
         }
     });
