@@ -110,7 +110,7 @@ public class BlogWebsiteController extends Controller {
 		comment.add(com);
 		Db.update("update click set comN="+ getPara("comN")+" where id = "+getPara("title_id")+"");
 		CacheKit.put("article","comment"+getPara("title_id")+"",comment);
-		renderJson(); 
+		renderJson(com.getId()); 
 	}
 	
 	/******************************获取评论列表功能********************************/
@@ -133,8 +133,9 @@ public class BlogWebsiteController extends Controller {
 				new UserComment().set("user_id", getPara("userID")).set("comment_id", id).set("yes",1).save();
 				renderJson("{\"comGN\":"+comGN+"}");
 			}	
+		}else {
+			renderJson();
 		}
-		renderJson();
 	}
 	
 	/*******************************踩评论功能***************************************/
@@ -151,7 +152,9 @@ public class BlogWebsiteController extends Controller {
 			renderJson("{\"comBN\":"+comBN+"}");
 			}
 		}
-		renderJson();
+		else {
+			renderJson();
+		}
 	}
 	
 	/*******************************返回前台此时评论区的状态*************************************/

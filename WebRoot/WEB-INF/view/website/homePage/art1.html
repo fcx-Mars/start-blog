@@ -130,9 +130,9 @@ function getJsonObjLength(jsonObj) {
 
 function createDiv(i){
 	var ht = '<p id="p_com'+i+'"></p><div>'+
-			'<button onclick="comment_G(this)" class="butGN glyphicon glyphicon-thumbs-up" id="but_GN'+i+'" ><p id="numGN"></p>'+
+			'<button onclick="comment_G(this)" class="butGN glyphicon glyphicon-thumbs-up" id="but_GN'+i+'" ><p id="numGN'+i+'"></p>'+
 			'</button><button onclick="comment_B(this)" class="butBN glyphicon glyphicon-thumbs-down" id="but_BN'+i+'">'+
-			'<p id="numBN"></p></button></div>'
+			'<p id="numBN'+i+'"></p></button></div>'
 	$("#loc_comment").prepend(ht);
 }
 
@@ -152,8 +152,8 @@ function getComData(){
  					$("#but_BN"+i).attr("name",cdata.comData[i].id);
  					userandcomment(cdata.comData[i].id);
  	
- 					$("#numGN").text(numgn+"赞");
- 					$("#numBN").text(numbn+"踩");
+ 					$("#numGN"+i).text(numgn+"赞");
+ 					$("#numBN"+i).text(numbn+"踩");
  					if(!comOK){		
 						if(comYES){
 							$("#but_GN"+i).addClass("blue");
@@ -231,7 +231,13 @@ $("#but_com").click(function(){
 			url:"website/homePage/com_submit",
 			data:{"comc":com_c,"comt":(new Date()).toLocaleString(),"comac":#(mystr??),"comN":comN+1,"title_id":#(mystr??),"userID":#(userID??)},
 			success:function(data){
-				getComData();
+				createDiv(comN);
+				console.log(data);
+				$("#p_com"+comN).text((new Date()).toLocaleString() + "你的评论" +" ："+ com_c);
+				$("#but_GN"+comN).attr("name",data);
+				$("#but_BN"+comN).attr("name",data);
+				$("#numGN"+comN).text(0 +"赞");
+				$("#numBN"+comN).text(0 +"踩");
 			}
 		});
 	}
@@ -244,7 +250,13 @@ function comment_G(but){
 		url:"website/homePage/butGN",
 		data:{"id":but.name,"userID":#(userID??)},
 		success:function(data){
-			getComData();
+			$("#"+but.id+"").addClass("blue");
+			$("#"+but.id+"").attr("onclick","GNgone()");
+			var str = ""+but.id+"";
+			str = str.replace("G","B");
+			$("#"+str+"").attr("onclick","GNgone()");
+			str = str.replace("but_BN","numGN");
+			$("#"+str+"").text(data.comGN+"赞");
         }
     });
 }
@@ -255,8 +267,13 @@ function comment_B(but){
 		url:"website/homePage/butBN",
 		data:{"id":but.name,"userID":#(userID??)},
 		success:function(data){
-			console.log(data);
-			getComData();
+			$("#"+but.id+"").addClass("red");
+			$("#"+but.id+"").attr("onclick","BNgone()");
+			var str = ""+but.id+"";
+			str = str.replace("B","G");
+			$("#"+str+"").attr("onclick","BNgone()");
+			str = str.replace("but_GN","numBN");
+			$("#"+str+"").text(data.comBN+"踩");
         }
     });
 }
