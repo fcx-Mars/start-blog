@@ -25,6 +25,8 @@ body{
 	height: 100%;
 	padding-left: 0px;
 	padding-right: 0px;
+	margin-right:0px;
+	margin-left:35px;
 }
 .blog_column_main_row_left{
 	background-color: whitesmoke;

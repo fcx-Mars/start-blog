@@ -14,6 +14,7 @@ import cn.jbolt.common.model._MappingKit;
 
 import com.jfinal.ext.interceptor.SessionInViewInterceptor;
 import com.jfinal.plugin.druid.DruidPlugin;
+import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.json.FastJsonFactory;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
@@ -76,6 +77,7 @@ public class MainConfig extends JFinalConfig {
 		//添加到插件列表中
 		me.add(dbPlugin);
 		me.add(arp);
+		me.add(new EhCachePlugin());//ehcache的位置
 	}
 	/**
 	 * 配置全局拦截器
